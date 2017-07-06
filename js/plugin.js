@@ -43,32 +43,57 @@ $(document).ready(function(){
     return $("#suggestionBox");
 
   }
-  var setWord = function(dataArr,domElement,idforsuggestionbox) {
+    var setWord = function(dataArr,domElement,idforsuggestionbox) {
     var x = idforsuggestionbox;
     var i = 0;
+    var rightkey = false;
+    var j = 0;
     var y;
+    var index = 4;
 
     domElement.on('keydown',function(e) {
     if(i == dataArr.length && e.keyCode == 40) {
         i = 0;
         x = idforsuggestionbox;
-        y.toggleClass('active');
+        $("div").eq(index-1).toggleClass('active');
+        index = 4;
+
+      }
+    if(e.keyCode == 40) {
+      if(i == 0)
+        $("div").eq(index).toggleClass('active');
+      else{
+        $("div").eq(index-1).toggleClass('active');
+        $("div").eq(index).toggleClass('active');
+      }
+      index++;
+      i++;
+
+
+
+    }
+    else if (e.keyCode == 38) {
+      index--;
+      if(index == 4){
+        $("div").eq(dataArr.length+4-1).toggleClass('active');
+          $("div").eq(index).toggleClass('active');
+          index = dataArr.length+4;
+
+      }
+      else{
+        $("div").eq(index).toggleClass('active');
+        $("div").eq(index-1).toggleClass('active');
+
       }
 
-    if(e.keyCode == 40) {
-    i++;
-    if(i > 1)
-      y.toggleClass('active');
-
-    x.toggleClass('active');
-    y = x;
-    x = x.next();
     }
     else if(e.keyCode == 13) {
-      domElement.css("background-color","#FFFFFF");
 
-      if(y.hasClass('active'))
-        domElement.val(y[0].innerText);
+      domElement.css("background-color","#FFFFFF");
+      if($("div").eq(index-1).hasClass('active'))
+        domElement.val($("div").eq(index-1)[0].innerText);
+        else if($("div").eq(index).hasClass('active'))
+          domElement.val($("div").eq(index)[0].innerText);
     }
 
   });
